@@ -1,18 +1,26 @@
 package com.sicredi.challenge.agenda;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+
+@Data
+@AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Document
 public class Agenda {
 
-    String title;
-    Date date;
-    String description;
+    @Id
+    private Integer id;
 
-}
+    private String title;
+
+    private Date date;
+
+    private String description;
+
+ }

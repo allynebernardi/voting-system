@@ -24,12 +24,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	//test
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation 'io.projectreactor:reactor-test'
-	compile('io.springfox:springfox-swagger2:2.9.2')
-	compile('io.springfox:springfox-swagger-ui:2.9.2')
+	testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+
+	//Springfox swagger
+	compile "io.springfox:springfox-swagger2:2.9.2"
+	compile "io.springfox:springfox-swagger-ui:2.9.2"
 }
 
 test {

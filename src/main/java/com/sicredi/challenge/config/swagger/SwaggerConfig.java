@@ -1,4 +1,4 @@
-package com.sicredi.challenge.config;
+package com.sicredi.challenge.config.swagger;
 
 
 import com.google.common.base.Predicate;
