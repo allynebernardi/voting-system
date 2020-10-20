@@ -1,13 +1,13 @@
 package com.sicredi.challenge.agenda;
 
 
-import com.sicredi.challenge.exceptions.AgendaException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -72,7 +72,7 @@ class AgendaServiceTest {
 
         Mono<Agenda> agendaMono = agendaService.findById(MOCK_INVALID_ID);
         StepVerifier.create(agendaMono)
-                .expectErrorMatches(throwable -> throwable instanceof AgendaException)
+                .expectErrorMatches(throwable -> throwable instanceof ResponseStatusException)
                 .verify();
 
     }

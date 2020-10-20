@@ -3,9 +3,10 @@ package com.sicredi.challenge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = ErrorWebFluxAutoConfiguration.class)
 @ComponentScan(basePackages = {"com.sicredi.challenge"})
 public class ChallengeApplication {
 

@@ -32,15 +32,30 @@ public class AgendaController {
     @ApiOperation(value = "Find all agendas")
     @ApiDefaultResponses
     @GetMapping
-    public ResponseEntity<Flux<Agenda>> findAll(Pageable pageable){
-        return ResponseEntity.ok(agendaService.findAll(pageable));
+    public ResponseEntity<Flux<Agenda>> findAll( ){
+        return ResponseEntity.ok(agendaService.findAll());
     }
 
     @ApiOperation(value = "Find an agenda by Id")
     @ApiDefaultResponses
     @GetMapping(value="/{agendaId}")
-    public ResponseEntity<Mono<Agenda>> findById(@PathVariable("agendaId") Integer agendaId){
+    public ResponseEntity<Mono<Agenda>> findAgendaById(@PathVariable("agendaId") Integer agendaId){
         return ResponseEntity.ok(agendaService.findById(agendaId));
     }
+
+    @ApiOperation(value = "Delete Agenda by Id")
+    @ApiDefaultResponses
+    @DeleteMapping(value="/{agendaId}")
+    public ResponseEntity deleteAgenda(@PathVariable("agendaId") Integer agendaId){
+        agendaService.delete(agendaId);
+        return ResponseEntity.noContent().build();
+    }
+    @ApiOperation(value = "Update Agenda")
+    @ApiDefaultResponses
+    @PutMapping(value="/{agendaId}")
+    public ResponseEntity<Mono<Agenda>> updateAgenda(@PathVariable Integer agendaId, @RequestBody Agenda agenda){
+           return ResponseEntity.ok(agendaService.update(agendaId,agenda));
+    }
+
 
 }

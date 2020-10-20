@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
         value = {
                 @ApiResponse(code = 200, message = "successful operation"),
                 @ApiResponse(code = 400, message = "Invalid Parameters"),
-                @ApiResponse(code = 404, message = "Agenda Not Found"),
-                @ApiResponse(code = 403, message = "You do not have permission to access this resource"),
+                @ApiResponse(code = 404, message = "Register Not Found"),
+                @ApiResponse(code = 403, message = "You do not have permission to access this resource")
         }
  )
 public @interface ApiDefaultResponses {
