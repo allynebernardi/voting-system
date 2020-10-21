@@ -3,7 +3,6 @@ package com.sicredi.challenge.agenda;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,37 +19,38 @@ public class AgendaService {
     @Autowired
     AgendaRepository agendaRepository;
 
- 
-    public Flux<Agenda> findAll( ){
+
+    public Flux<Agenda> findAll() {
         return agendaRepository.findAll();
     }
 
-    public Mono<Agenda> findById(Integer id){
+    public Mono<Agenda> findById(Integer id) {
         return agendaRepository.findById(id)
-                .switchIfEmpty(agendaNotFoundException(id));
+                .switchIfEmpty(agendaNotFoundException());
     }
 
-    public Mono<Agenda> save(Agenda entity){
+    public Mono<Agenda> save(Agenda entity) {
         return agendaRepository.save(entity);
     }
 
-    public void delete(Integer id){
+    // TODO: 21/10/2020 exception when id Not Exists 
+    public void delete(Integer id) {
         agendaRepository.deleteById(id)
-               .subscribe(response -> log.info("Agenda {} deleted", id),
-                       error -> log.warn("Error to delete Agenda {}",id));
+                .subscribe(response -> log.info("Agenda {} deleted", id),
+                        error -> log.warn("Error to delete Agenda {}", id));
 
     }
 
-    public Mono<Agenda> update(Integer id, Agenda agenda){
+    public Mono<Agenda> update(Integer id, Agenda agenda) {
         return agendaRepository.findById(id)
                 .map(existingAgenda -> {
                     return buildAgenda(agenda, existingAgenda);
                 })
                 .flatMap(this.agendaRepository::save)
-                .switchIfEmpty(agendaNotFoundException(id));
+                .switchIfEmpty(agendaNotFoundException());
     }
 
-    private Agenda buildAgenda( Agenda agenda, Agenda existingAgenda) {
+    private Agenda buildAgenda(Agenda agenda, Agenda existingAgenda) {
         return existingAgenda.builder()
                 .date(agenda.getDate())
                 .id(existingAgenda.getId())
@@ -60,8 +60,8 @@ public class AgendaService {
     }
 
 
-    public <T> Mono<T> agendaNotFoundException(Integer id){
-        return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,"Agenda not found"));
+    public <T> Mono<T> agendaNotFoundException() {
+        return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Agenda not found"));
     }
 
 }
