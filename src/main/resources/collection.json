@@ -1,0 +1,258 @@
+{
+  "info": {
+    "_postman_id": "a5b1cf1d-850a-4117-ab2b-525bfacd806e",
+    "name": "votting-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Agenda",
+      "item": [
+        {
+          "name": "localhost:8080/v1/agendas",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   \r\n   {\r\n       \"id\":80,\r\n       \"title\":\"Title test\",\r\n       \"date\":\"2020-10-20T16:30:00.000000\",\r\n       \"description\":\"test description\"\r\n   } \r\n    ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/v1/agendas",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/agendas",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   \r\n   {\r\n       \"title\":\"Title\",\r\n       \"data\":\"2020-10-18T16:30:00.000000\",\r\n       \"description\":\"test description\"\r\n   } \r\n    \r\n   description;",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/v1/agendas",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/agendas/33",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/v1/agendas/33",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "agendas",
+                "33"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/agendas/80",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/v1/agendas/80",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "agendas",
+                "80"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/agendas/33",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   \r\n   {\r\n       \"title\":\"Title test UPDATE\",\r\n       \"date\":\"2020-10-20T16:30:00.000000\",\r\n       \"description\":\"test description\"\r\n   } \r\n    ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/v1/agendas/33",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "agendas",
+                "33"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Associate",
+      "item": [
+        {
+          "name": "localhost:8080/v1/associates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/v1/associates",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "associates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/associates",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   \r\n   {\r\n       \"id\":1,\r\n       \"name\":\"Associate1\",\r\n       \"cpf\":\"123456789102345\",\r\n       \"ative\":true\r\n   } ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/v1/associates/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "associates",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/associates",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   \r\n   {\r\n       \"id\":2,\r\n       \"name\":\"Associate 2\",\r\n       \"CPF\":\"123456789102345\",\r\n       \"ative\":true\r\n   } ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/v1/associates",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "associates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "localhost:8080/v1/associates/1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/v1/associates/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "associates",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
