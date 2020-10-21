@@ -4,30 +4,30 @@
    * [Requirements](#Requirements)
    * [Installation](#Installation)
    * [Usage](#Usage)
-   * [Exploring APIs](#Exploring APIs)
+   * [APIs](#APIs)
    * [Technologies](#Technologies)
 
 <!--te-->
 
-###About
+##About
  This API Provides some endpoints for a voting system in a company, where each member has one vote, and decisions are taken in assemblies, by vote.
 
-####Requirements
+##Requirements
  - Java 11
  - Gradle 6.6
  
-####Installation
+##Installation
   ```bash
   git clone https://github.com/allynebernardi/voting-system.git
   ```
   
-####Usage
+##Usage
    ```bash
    $ gradle bootRun
    ```
 The server will start at <http://localhost:8080>.
 
-####Exploring the Rest APIs
+##Exploring the Rest APIs
 
 The application defines following REST APIs
 
@@ -58,7 +58,7 @@ Session API:
  ```
 
 
-####🛠 Technologies 
+##🛠 Technologies 
 The following tools were used in the construction of the project:
 
 - [Gradle](https://docs.gradle.org)
