@@ -57,7 +57,7 @@ Session API:
  ```
 
 
-#### 🛠 Technologies 
+#### Technologies 🛠 
 The following tools were used in the construction of the project:
 
 - [Gradle](https://docs.gradle.org)
