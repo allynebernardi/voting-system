@@ -1,13 +1,21 @@
 package com.sicredi.challenge.session;
 
-import com.sicredi.challenge.associate.UserClientService;
+import com.sicredi.challenge.agenda.Agenda;
+import com.sicredi.challenge.agenda.AgendaService;
+import com.sicredi.challenge.associate.Associate;
+import com.sicredi.challenge.associate.AssociateService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple3;
+
+import java.util.List;
 
 
 @Service
@@ -16,15 +24,19 @@ import reactor.core.publisher.Mono;
 public class SessionService {
 
 
-    public static final String ABLE_TO_VOTE = "ABLE_TO_VOTE";
     public static final String SESSION_EXPIRED = "Session  Expired";
     public static final String ASSOCIATE_ALREADY_VOTED = "Associate Already Voted";
-    public static final String ASSOCIATE_ENABLE_TO_VOTE = "Associate Enable to Vote";
+    public static final String AGENDA_NOT_FOUND = "Agenda Not Found";
+    public static final String USER_NOT_ABLE_OR_EXIST = "User Not Able";
+    public static final String UNABLE_TO_VOTE = "UNABLE_TO_VOTE";
+
 
     @Autowired
     SessionRepository sessionRepository;
 
-    private final UserClientService userClientService;
+    private final AgendaService agendaService;
+
+    private final AssociateService associateService;
 
     private SessionMapper sessionMapper;
 
@@ -34,25 +46,56 @@ public class SessionService {
                 .switchIfEmpty(sessionException(HttpStatus.NOT_FOUND, SESSION_EXPIRED));
     }
 
+    // TODO: 21/10/2020 Refactoring this logic and remove block().
     public Mono<SessionResponseDTO> save(Session entity) {
-        log.info("Registring Session  And Vote for Agenda{}", entity.getAgenda().getTitle());
-        return sessionRepository.findByAssociateAndAgenda(entity.getAssociate(), entity.getAgenda())
-                .flatMap(alreadyVoted -> sessionException(HttpStatus.CONFLICT, ASSOCIATE_ALREADY_VOTED))
-                .filterWhen(session -> isAbleToVote(entity))
-                .then(this.sessionRepository.save(entity))
-                .map(session -> sessionMapper.map(session));
+        if (!agendaService.existsAgenda(entity.getAgenda().getId())) {
+            return sessionException(HttpStatus.PRECONDITION_FAILED, AGENDA_NOT_FOUND);
+        } else if (associateService.validateAssociate(entity).equals(UNABLE_TO_VOTE)) {
+            return sessionException(HttpStatus.PRECONDITION_FAILED, USER_NOT_ABLE_OR_EXIST);
+        } else {
+            log.info("Registring Session  And Vote for Agenda {}", entity.getAgenda().getId());
+            return sessionRepository.findByAssociateAndAgenda(entity.getAssociate(), entity.getAgenda())
+                    .flatMap(alreadyVoted -> sessionException(HttpStatus.CONFLICT, ASSOCIATE_ALREADY_VOTED))
+                    .then(this.sessionRepository.save(entity))
+                    .flatMap(sessionEnhance -> enhanceSessionResponse(sessionEnhance));
+        }
     }
 
-    private Mono<Boolean> isAbleToVote(Session session) {
-        return userClientService.validateUser(session.getAssociate().getCpf())
-                .map(s -> s.equals(ABLE_TO_VOTE) ? true : false)
-                .map(exist -> !exist)
-                .switchIfEmpty(sessionException(HttpStatus.PRECONDITION_FAILED, ASSOCIATE_ENABLE_TO_VOTE));
+    // TODO: 21/10/2020 Refactoring or Remodeling Date Structure: MongoDb Reactive Does not support @DBRef yet. Created enhance to return more details.
+    private Mono<SessionResponseDTO> enhanceSessionResponse(Session session) {
+        return Mono.just(session)
+                .flatMap(sessionAfter -> Mono.zip(Mono.just(session), agendaService.findById(sessionAfter.getId())
+                        , associateService.findById(sessionAfter.getId())))
+                .flatMap(this::getSessionEnhanced);
+
     }
 
-    // TODO: 21/10/2020 implement logic to return sum votes of the Session  
-    public Mono<SessionResponseDTO> findResultsByAgendaId(Integer agendaId) {
+    private Mono<SessionResponseDTO> getSessionEnhanced(Tuple3<Session, Agenda, Associate> tuple3) {
+        return Mono.just(SessionResponseDTO
+                .builder()
+                .agendaName(tuple3.getT2().getTitle())
+                .associateName(tuple3.getT3().getName())
+                .voteStatus(StringUtils.isEmpty(tuple3.getT1().getVote()) ? false : true)
+                .build());
+
+    }
+
+    // TODO: 23/10/2020 Finisher implematation 
+    public Flux<SessionResponseDTO> findResultsByAgendaId(Integer agendaId) {
+        return findVotesByAgenda(agendaId)
+                .groupBy(Session::getVote)
+                .flatMap(idFlux -> idFlux.collectList()
+                        .map(sessions -> createResponse(idFlux.key(), sessions)))
+                .flatMap(sessionResponseDTOMono -> sessionResponseDTOMono);
+
+    }
+
+    private Mono<SessionResponseDTO> createResponse(String key, List<Session> sessions) {
         return Mono.just(SessionResponseDTO.builder().build());
+    }
+
+    private Flux<Session> findVotesByAgenda(Integer agendaId) {
+        return sessionRepository.findByAgenda(agendaService.findById(agendaId));
     }
 
     public <T> Mono<T> sessionException(HttpStatus httpStatus, String message) {

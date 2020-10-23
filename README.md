@@ -4,7 +4,7 @@
    * [Requirements](#Requirements)
    * [Installation](#Installation)
    * [Usage](#Usage)
-   * [Exploring APIs](#Exploring APIs)
+   * [APIs](#APIs )
    * [Technologies](#Technologies)
 
 <!--te-->

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -20,13 +19,9 @@ public class Session {
     @Id
     private Integer id;
 
-    @DBRef(lazy = true)
     private Agenda agenda;
 
-    @DBRef(lazy = true)
     private Associate associate;
-
-    private boolean VoteStatus;
 
     private String vote;
 

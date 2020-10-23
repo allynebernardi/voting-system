@@ -1,5 +1,6 @@
 package com.sicredi.challenge.associate;
 
+import com.sicredi.challenge.session.Session;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,14 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class AssociateService {
 
+    public static final String USER_NOT_FOUND = "User Not Found";
+    public static final String ASSOCIATE_ENABLE_TO_VOTE = "Associate Enable to Vote";
+    public static final String UNABLE_TO_VOTE = "UNABLE_TO_VOTE";
 
     @Autowired
     AssociateRepository associateRepository;
+
+    private final UserClientService userClientService;
 
 
     public Flux<Associate> findAll() {
@@ -26,7 +32,7 @@ public class AssociateService {
 
     public Mono<Associate> findById(Integer id) {
         return associateRepository.findById(id)
-                .switchIfEmpty(associateNotFoundException());
+                .switchIfEmpty(associateNotFoundException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
     }
 
     public Mono<Associate> save(Associate entity) {
@@ -40,7 +46,15 @@ public class AssociateService {
                     return buildAssociate(associate, existingAssociate);
                 })
                 .flatMap(this.associateRepository::save)
-                .switchIfEmpty(associateNotFoundException());
+                .switchIfEmpty(associateNotFoundException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+    }
+
+
+    public String validateAssociate(Session session) {
+        return associateRepository.findById(session.getAssociate().getId())
+                .flatMap(associate -> userClientService.validateUser(associate.getCpf()))
+                .switchIfEmpty(associateNotFoundException(HttpStatus.NOT_FOUND, USER_NOT_FOUND))
+                .block();
     }
 
     private Associate buildAssociate(Associate associate, Associate existingAssociate) {
@@ -52,8 +66,8 @@ public class AssociateService {
                 .build();
     }
 
-    public <T> Mono<T> associateNotFoundException() {
-        return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Associate not found"));
+    public <T> Mono<T> associateNotFoundException(HttpStatus httpStatus, String message) {
+        return Mono.error(new ResponseStatusException(httpStatus, message));
     }
 
 }

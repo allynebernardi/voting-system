@@ -29,6 +29,11 @@ public class AgendaService {
                 .switchIfEmpty(agendaNotFoundException());
     }
 
+    public boolean existsAgenda(Integer id) {
+        return agendaRepository.existsById(id)
+                .map(aBoolean -> aBoolean).block();
+    }
+
     public Mono<Agenda> save(Agenda entity) {
         return agendaRepository.save(entity);
     }

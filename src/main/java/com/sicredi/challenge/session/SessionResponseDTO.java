@@ -15,7 +15,11 @@ public class SessionResponseDTO {
 
     private String associateName;
 
-    private boolean status;
+    private boolean voteStatus;
+
+    private Integer no;
+
+    private Integer yes;
 
 
 }

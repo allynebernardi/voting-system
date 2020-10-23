@@ -8,7 +8,6 @@ import org.mapstruct.ReportingPolicy;
 public interface SessionMapper {
 
     @Mapping(target = "agendaName", source = "agenda.title")
-    @Mapping(target = "status", source = "voteStatus")
     @Mapping(target = "associateName", source = "associate.name")
     SessionResponseDTO map (Session session);
 }

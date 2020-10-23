@@ -29,7 +29,7 @@ public class UserClientService {
     public Mono<String> validateUser(String cpf){
         return getUserClientConfig()
                 .get()
-                .uri(userApiConfig.getUserURL())
+                .uri(userApiConfig.getValidateUser(), cpf)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(HttpStatus.NOT_FOUND::equals, e -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,"Associate not found")))
